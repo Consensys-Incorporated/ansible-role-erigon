@@ -1,0 +1,15 @@
+---
+- name: Get latest erigon release
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/erigontech/erigon/releases/latest
+    method: GET
+    status_code: 200
+  register: _erigon_latest_release
+
+- name: Set erigon version
+  ansible.builtin.set_fact:
+    erigon_version: "{{ _erigon_latest_release.json.tag_name }}"
+
+- name: Information
+  ansible.builtin.debug:
+    msg: "Discovered erigon_version [{{ erigon_version }}]"

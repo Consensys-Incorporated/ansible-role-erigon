@@ -7,8 +7,31 @@
       --datadir={{erigon_data_dir}}
       --port={{erigon_p2p_port}}
       --identity={{erigon_identity}}
-      --networkid={{erigon_network_id}}
       --chain={{erigon_chain}}
+
+- name: Add network id to the cmdline_args
+  ansible.builtin.set_fact:
+    _erigon_internal_cmdline_args: >
+      {{_erigon_internal_cmdline_args}}
+      --networkid={{erigon_network_id}}
+  when: erigon_network_id | string != ""
+
+- name: Add engine api to the cmdline_args
+  ansible.builtin.set_fact:
+    _erigon_internal_cmdline_args: >
+      {{_erigon_internal_cmdline_args}}
+      --authrpc.addr={{erigon_authrpc_addr}}
+      --authrpc.port={{erigon_authrpc_port}}
+      --authrpc.vhosts '{{erigon_authrpc_vhosts|map('to_json')|join(',')}}'
+      {{ ('--authrpc.jwtsecret=' + erigon_authrpc_jwtsecret) if erigon_authrpc_jwtsecret != '' else '' }}
+  when: erigon_authrpc_enabled|bool == True
+
+- name: Use an external consensus client
+  ansible.builtin.set_fact:
+    _erigon_internal_cmdline_args: >
+      {{_erigon_internal_cmdline_args}}
+      --externalcl
+  when: erigon_externalcl|bool == True
 
 - name: Add nodekey to the cmdline_args
   ansible.builtin.set_fact:

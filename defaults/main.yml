@@ -10,6 +10,8 @@ erigon_discovery_public_ip: "true"
 # internal state to maintain idempotency
 erigon_state_updates: []
 erigon_architecture: "amd64"
+# Release tag to install (e.g. v3.7.1), or "latest" to look up the newest GitHub release
+erigon_version: ""
 # Version to install
 erigon_download_url: "https://github.com/erigontech/erigon/releases/download/{{ erigon_version }}/erigon_{{ erigon_version }}_linux_{{ erigon_architecture }}.tar.gz"
 
@@ -29,8 +31,17 @@ erigon_log_dir: "/var/log/erigon"
 erigon_ipc_file: "{{ erigon_base_dir }}/erigon.ipc"
 erigon_version_info_file: "{{ erigon_config_dir }}/elc_version"
 
-erigon_network_id: 1
+# --chain sets the network id; only set erigon_network_id to override it
+erigon_network_id: ""
 erigon_chain: mainnet
+# Engine API for the consensus client
+erigon_authrpc_enabled: "true"
+erigon_authrpc_addr: "127.0.0.1"
+erigon_authrpc_port: 8551
+erigon_authrpc_vhosts: ["*"]
+erigon_authrpc_jwtsecret: ""
+# use a separate consensus client instead of erigon's built in caplin
+erigon_externalcl: "true"
 erigon_healthcheck: "true"
 erigon_identity: "erigonNode"
 erigon_max_peers: 50

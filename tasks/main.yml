@@ -8,6 +8,15 @@
   ansible.builtin.set_fact:
     erigon_architecture: "{{ 'arm64' if ansible_facts.architecture == 'aarch64' else 'amd64' }}"
 
+- name: Verify erigon version
+  ansible.builtin.fail:
+    msg: "Should supply an erigon_version parameter value, e.g. v3.7.1 or latest"
+  when: erigon_version == ''
+
+- name: Include task latest
+  ansible.builtin.include_tasks: "latest.yml"
+  when: erigon_version == 'latest'
+
 - name: Install erigon
   ansible.builtin.include_tasks: "install.yml"
 
