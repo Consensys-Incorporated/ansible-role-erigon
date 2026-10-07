@@ -1,6 +1,6 @@
 ---
 - name: Add basics to the cmdline_args
-  set_fact:
+  ansible.builtin.set_fact:
     _erigon_internal_cmdline_args: >
       {{_erigon_internal_cmdline_args}}
       --verbosity={{erigon_log_verbosity}}
@@ -11,14 +11,14 @@
       --chain={{erigon_chain}}
 
 - name: Add nodekey to the cmdline_args
-  set_fact:
+  ansible.builtin.set_fact:
     _erigon_internal_cmdline_args: >
       {{_erigon_internal_cmdline_args}}
       --nodekey={{erigon_node_private_key_file}}
   when: erigon_node_private_key_file != ""
 
 - name: Add metrics to the cmdline_args
-  set_fact:
+  ansible.builtin.set_fact:
     _erigon_internal_cmdline_args: >
       {{_erigon_internal_cmdline_args}}
       --metrics --pprof
@@ -29,7 +29,7 @@
   when: erigon_metrics_enabled|bool == True
 
 - name: Add miner to the cmdline_args
-  set_fact:
+  ansible.builtin.set_fact:
     _erigon_internal_cmdline_args: >
       {{_erigon_internal_cmdline_args}}
       --mine
@@ -39,7 +39,7 @@
   when: erigon_miner_enabled|bool == True
 
 - name: Add RPC to the cmdline_args
-  set_fact:
+  ansible.builtin.set_fact:
     _erigon_internal_cmdline_args: >
       {{_erigon_internal_cmdline_args}}
       --http --http.compression
@@ -52,16 +52,16 @@
   when: erigon_http_enabled|bool == True
 
 - name: Add custom cmdline_args to the list
-  set_fact:
+  ansible.builtin.set_fact:
     _erigon_internal_cmdline_args: >
       {{_erigon_internal_cmdline_args}}
       {{erigon_cmdline_args | join(' ') }}
   when: erigon_cmdline_args != ""
 
 - name: Sanitize cmdline_args
-  set_fact:
+  ansible.builtin.set_fact:
     _erigon_internal_cmdline_args: "{{_erigon_internal_cmdline_args | replace('\n', '') | replace('\"', '')}}"
 
 - name: Show cmdline_args
-  debug:
+  ansible.builtin.debug:
     msg: "{{_erigon_internal_cmdline_args}}"
