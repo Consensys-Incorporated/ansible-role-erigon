@@ -79,6 +79,9 @@
     src: "{{ erigon_download_url }}"
     remote_src: "{{ true }}"
     dest: "{{ erigon_install_dir }}"
+    # v3 tarballs wrap the binaries in a erigon_<version>_linux_<arch>/ directory
+    extra_opts:
+      - --strip-components=1
     owner: "{{ erigon_user }}"
     group: "{{ erigon_group }}"
     mode: '0775'
